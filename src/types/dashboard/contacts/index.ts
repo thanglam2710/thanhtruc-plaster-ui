@@ -6,15 +6,18 @@ export interface ContactDTO {
   customerName: string;
   phone: string;
   email?: string;
+  companyName?: string;
   message?: string;
-  
+
   productLink?: string;
   attachmentUrl?: string;
-  
-  contactType: ContactType;
-  contactStatus: ContactStatus;
+
+  contactType: ContactType | string;
+  contactTypeName?: string;
+  contactStatus: ContactStatus | string;
+  contactStatusName?: string;
   adminNote?: string;
-  
+
   createdTime?: string;
 }
 

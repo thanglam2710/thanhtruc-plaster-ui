@@ -28,13 +28,13 @@ export const useGetBlogById = (id: number) => {
 
 export const useCreateBlogMutation = () => {
   return useApiMutation<BlogDTO, CreateBlogRequest>(
-    DASHBOARD_API_ENDPOINTS.BLOGS.CREATE, false, { invalidateQueries: [CacheKeys.Blogs] }
+    DASHBOARD_API_ENDPOINTS.BLOGS.CREATE, true, { invalidateQueries: [CacheKeys.Blogs] }
   );
 };
 
 export const useUpdateBlogMutation = () => {
   return useApiPutMutation<BlogDTO, UpdateBlogRequest>(
-    DASHBOARD_API_ENDPOINTS.BLOGS.UPDATE, { invalidateQueries: [CacheKeys.Blogs] }, false
+    DASHBOARD_API_ENDPOINTS.BLOGS.UPDATE, { invalidateQueries: [CacheKeys.Blogs] }, true
   );
 };
 

@@ -61,6 +61,49 @@ export class ApiError extends Error {
   }
 }
 
+// Helper: Convert camelCase to PascalCase
+function toPascalCase(str: string): string {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+// Helper: Convert JSON object to FormData with PascalCase keys
+function jsonToFormData(obj: any): FormData {
+  const formData = new FormData();
+
+  Object.keys(obj).forEach((key) => {
+    const value = obj[key];
+    const pascalKey = toPascalCase(key);
+
+    if (value === null || value === undefined) {
+      // Skip null/undefined values
+      return;
+    }
+
+    if (Array.isArray(value)) {
+      // Handle arrays (e.g., gallery images)
+      value.forEach((item, index) => {
+        if (typeof item === 'object' && !(item instanceof File)) {
+          // If array item is object, stringify it
+          formData.append(`${pascalKey}[${index}]`, JSON.stringify(item));
+        } else {
+          formData.append(`${pascalKey}[${index}]`, item);
+        }
+      });
+    } else if (value instanceof File) {
+      // Handle File objects
+      formData.append(pascalKey, value);
+    } else if (typeof value === 'object') {
+      // Handle nested objects - stringify them
+      formData.append(pascalKey, JSON.stringify(value));
+    } else {
+      // Handle primitive values
+      formData.append(pascalKey, String(value));
+    }
+  });
+
+  return formData;
+}
+
 export async function baseApiRequest<T = any>(
   endpoint: string,
   method: RequestMethod = "GET",
@@ -126,7 +169,9 @@ export async function baseApiRequest<T = any>(
 
   if (method !== "GET") {
     if (isMultipart) {
-      body = data;
+      // Convert JSON object to FormData with PascalCase keys
+      body = data instanceof FormData ? data : jsonToFormData(data);
+      // Let browser set Content-Type with boundary
       delete defaultHeaders["Content-Type"];
     } else {
       body = data ? JSON.stringify(data) : undefined;

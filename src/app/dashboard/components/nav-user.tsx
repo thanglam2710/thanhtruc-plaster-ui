@@ -20,10 +20,15 @@ import {
 } from "@/components/ui/sidebar";
 import { useAuth } from "@/lib/providers/auth-provider";
 import Link from "next/link";
-import { LoginResponse } from "@/types/dashboard/auth-model";
 import { DASHBOARD_AUTH_ROUTES } from "@/constants/routes/dashboard/auth";
+// Simplified interface for display
+export interface UserDisplayInfo {
+  fullName: string;
+  email: string;
+  avatarUrl?: string | null;
+}
 
-export function NavUser({ user }: { user: LoginResponse }) {
+export function NavUser({ user }: { user: UserDisplayInfo }) {
   const { isMobile } = useSidebar();
 
   const logoutFn = useAuth().logout;

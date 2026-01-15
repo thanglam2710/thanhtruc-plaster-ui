@@ -21,8 +21,8 @@ export const useGetProjectsPagination = (request?: SearchProjectRequest | null, 
 // GET BY ID
 export const useGetProjectById = (id: number) => {
   return useApiQuery<ProjectDTO>(
-    CacheKeys.Projects, 
-    DASHBOARD_API_ENDPOINTS.PROJECTS.GET_BY_ID.replace("{id}", id.toString()), 
+    CacheKeys.Projects,
+    DASHBOARD_API_ENDPOINTS.PROJECTS.GET_BY_ID.replace("{id}", id.toString()),
     { skip: !id }
   );
 };
@@ -30,8 +30,8 @@ export const useGetProjectById = (id: number) => {
 // CREATE
 export const useCreateProjectMutation = () => {
   return useApiMutation<ProjectDTO, CreateProjectRequest>(
-    DASHBOARD_API_ENDPOINTS.PROJECTS.CREATE, 
-    false, 
+    DASHBOARD_API_ENDPOINTS.PROJECTS.CREATE,
+    true,
     { invalidateQueries: [CacheKeys.Projects] }
   );
 };
@@ -41,7 +41,7 @@ export const useUpdateProjectMutation = () => {
   return useApiPutMutation<ProjectDTO, UpdateProjectRequest>(
     DASHBOARD_API_ENDPOINTS.PROJECTS.UPDATE,
     { invalidateQueries: [CacheKeys.Projects] },
-    false
+    true
   );
 };
 

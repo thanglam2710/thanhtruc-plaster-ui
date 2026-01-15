@@ -23,35 +23,37 @@ import {
 import { NavMain } from "./nav-main";
 import { NavUser } from "./nav-user";
 import Link from "next/link";
+import { getStaff } from "@/lib/providers/auth-provider";
+import { useGetStaffById } from "@/hooks/dashboard/staffs/useStaffs";
+import { useEffect, useState } from "react";
+import { LoginResponse } from "@/types/dashboard/auth-model";
 
-// Mock user data (Thay bằng dữ liệu thật từ AuthProvider sau này)
-const mockUser = {
-  id: 1,
-  fullName: "Admin Thanh Trúc",
-  email: "admin@thanhtruc.vn",
-  avatarUrl: null,
-  roleName: "Admin",
-};
+
 
 const navItems = [
   {
-    title: "Tổng quan (Dashboard)",
+    title: "Tổng quan hệ thống",
     url: "/dashboard/admin",
     icon: PieChart,
-    isActive: true,
+    items: [
+      { title: "Bảng điều khiển", url: "/dashboard/admin" },
+    ],
   },
   {
-    title: "Liên hệ (Contacts)",
-    url: "/dashboard/admin/feedbacks", // Assuming feedbacks = contacts based on previous context
+    title: "Chăm sóc khách hàng",
+    url: "#",
     icon: MessageSquare,
+    items: [
+      { title: "Liên hệ", url: "/dashboard/contacts" },
+    ],
   },
   {
     title: "Danh mục & Dự án",
     url: "#",
     icon: Briefcase,
     items: [
-      { title: "Danh mục (Categories)", url: "/dashboard/categories" },
-      { title: "Dự án (Projects)", url: "/dashboard/admin/projects" },
+      { title: "Danh mục", url: "/dashboard/categories" },
+      { title: "Dự án", url: "/dashboard/projects" },
     ],
   },
   {
@@ -59,20 +61,44 @@ const navItems = [
     url: "#",
     icon: FileText,
     items: [
-      { title: "Danh sách bài viết", url: "/dashboard/admin/blogs" },
+      { title: "Bài viết", url: "/dashboard/blogs" },
       { title: "Loại bài viết", url: "/dashboard/blog-types" },
     ],
   },
   {
-    title: "Nhân viên (Staffs)",
-    url: "/dashboard/admin/staffs",
+    title: "Quản trị nhân sự",
+    url: "#",
     icon: User,
+    items: [
+      { title: "Nhân viên (Staffs)", url: "/dashboard/staffs" },
+    ],
   },
 ];
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  // const { staff } = useAuth(); // Dùng hook thật sau này
-  const staff = mockUser; // Dùng mock để test UI trước
+  const [currentUser, setCurrentUser] = useState<LoginResponse | null>(null);
+
+  useEffect(() => {
+    setCurrentUser(getStaff());
+  }, []);
+
+  // Fetch full details if we have an ID
+  const { data: staffData } = useGetStaffById(currentUser?.id || "");
+
+  // Prioritize real-time data from API, fallback to localStorage data
+  const displayUser = staffData ? {
+      fullName: staffData.fullName,
+      email: staffData.email,
+      avatarUrl: staffData.avatarUrl
+  } : currentUser ? {
+      fullName: currentUser.fullName,
+      email: currentUser.email,
+      avatarUrl: currentUser.avatarUrl
+  } : {
+      fullName: "Đang tải...",
+      email: "",
+      avatarUrl: null
+  };
 
   return (
     <Sidebar
@@ -95,8 +121,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
 
       <SidebarFooter className="bg-[#1A1A1A] text-white border-t border-white/10">
-        {/* @ts-ignore */}
-        <NavUser user={staff} />
+        <NavUser user={displayUser} />
       </SidebarFooter>
 
       <SidebarRail />

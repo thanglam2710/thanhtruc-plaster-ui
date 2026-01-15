@@ -43,10 +43,20 @@ export const DASHBOARD_API_ENDPOINTS = {
     GET_STATUS: "/Contacts/get-contact-status",
     GET_TYPE: "/Contacts/get-contact-type",
     GET_BY_ID: "/Contacts/{id}",
+    CREATE: "/Contacts/submit-contact",
     UPDATE_STATUS: "/Contacts/update-status",
   },
 
-  // 6. Quản lý Media (Cloudinary)
+  // 6. Quản lý Nhân viên
+  STAFFS: {
+    SEARCH: "/Staffs/search",
+    GET_BY_ID: "/Staffs/get-by-id",
+    CREATE: "/Staffs/create-admin",
+    UPDATE_PROFILE: "/Staffs/update-profile",
+    UPDATE_STATUS: "/Staffs/update-status",
+  },
+
+  // 7. Quản lý Media (Cloudinary)
   CLOUDINARY: {
     UPLOAD_MEDIA: "/Cloudinaries/upload-media",
     UPLOAD_IMAGE: "/Cloudinaries/upload-image",
@@ -54,7 +64,7 @@ export const DASHBOARD_API_ENDPOINTS = {
     DELETE_MEDIA: "/Cloudinaries/delete-media/{publicId}",
   },
 
-  // 7. Thống kê Dashboard
+  // 8. Thống kê Dashboard
   DASHBOARD: {
     GET_COUNTERS: "/Dashboards/get-counters",
     TOP_VIEW_BLOGS: "/Dashboards/top-view-blogs",

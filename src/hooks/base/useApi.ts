@@ -11,6 +11,30 @@ import { ApiError } from "@/lib/api/base-api"
 import type { NextApiResponse } from "next"
 import { broadcastInvalidation } from "@/lib/api/queryClient"
 
+// Helper: Convert PascalCase to camelCase
+function toCamelCase(str: string): string {
+  return str.charAt(0).toLowerCase() + str.slice(1);
+}
+
+// Helper: Recursively convert object keys from PascalCase to camelCase
+function convertKeysToCamelCase(obj: any): any {
+  if (obj === null || obj === undefined) return obj;
+
+  if (Array.isArray(obj)) {
+    return obj.map(item => convertKeysToCamelCase(item));
+  }
+
+  if (typeof obj === 'object' && obj.constructor === Object) {
+    return Object.keys(obj).reduce((acc, key) => {
+      const camelKey = toCamelCase(key);
+      acc[camelKey] = convertKeysToCamelCase(obj[key]);
+      return acc;
+    }, {} as any);
+  }
+
+  return obj;
+}
+
 // Helper: Invalidate local + broadcast
 function invalidateQueryKeys(queryClient: ReturnType<typeof useQueryClient>, keys?: string[]) {
   if (Array.isArray(keys) && keys.length > 0) {
@@ -27,7 +51,7 @@ function invalidateQueryKeys(queryClient: ReturnType<typeof useQueryClient>, key
   }
 }
 
-// Hook GET
+// Hook cho GET requests
 export function useApiQuery<T = any>(
   baseKey: string,
   endpoint: string,
@@ -47,12 +71,17 @@ export function useApiQuery<T = any>(
     queryKey: fullQueryKey,
     queryFn: async () => {
       if (skip) return null as T
-      const response = await apiClient.get<NextApiResponse<T>>(endpoint, { params, headers })
+
+      // Sử dụng kiểu any cho response để truy cập resultObj dễ dàng
+      const response = await apiClient.get<any>(endpoint, { params, headers })
+
       if (!response.isSuccessed) {
         throw new ApiError(response.message, response.statusCode)
       }
-      // Lưu ý: Tùy backend trả về, có thể return response.resultObj hoặc response
-      return response.resultObj as T 
+
+      // Convert PascalCase to camelCase before returning
+      const convertedData = convertKeysToCamelCase(response.resultObj);
+      return convertedData as T
     },
     staleTime: 5 * 60 * 1000,
     ...queryOptions,

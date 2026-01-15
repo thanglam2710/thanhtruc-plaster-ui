@@ -7,22 +7,29 @@ import {
   useEffect,
 } from "react";
 import { useRouter } from "next/navigation";
-import type { LoginResponse } from "@/types/dashboard/auth-model";
-import //   useForgotPasswordMutation, // Mở lại khi bạn đã tạo hook
-//   useLoginMutation,
-//   useResetPasswordMutation,
-"@/hooks/dashboard/useAuth";
-import { handleErrorApi } from "../utils";
-import { DASHBOARD_AUTH_ROUTES } from "@/constants/routes/dashboard/auth";
 import Cookies from "js-cookie";
 
-// Vì chưa có hook useAuth (sẽ làm ở bước sau), tạm thời tôi comment các hook lại để không lỗi
+import { LoginResponse } from "@/types/dashboard/auth-model";
+import {
+  useForgotPasswordMutation,
+  useLoginMutation,
+  useResetPasswordMutation,
+} from "@/hooks/dashboard/useAuth";
+import { handleErrorApi, toastSuccess } from "@/lib/utils/api";
+import { DASHBOARD_AUTH_ROUTES } from "@/constants/routes/dashboard/auth";
 
 interface AuthContextType {
   loading: boolean;
-  login: (data: any) => Promise<void>; // Tạm để any
+  login: (data: any) => Promise<void>;
   logout: () => Promise<void>;
   isAuthenticated: boolean;
+  forgotPassword: (email: string) => Promise<void>;
+  resetPassword: (
+    email: string,
+    pass: string,
+    confirmPass: string,
+    token: string
+  ) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -30,24 +37,44 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+
+  // Check trạng thái đăng nhập dựa trên localStorage
   const isAuthenticated = !!getStaff();
 
   useEffect(() => {
     setLoading(false);
   }, []);
 
-  // const loginMutation = useLoginMutation();
+  // API Hooks
+  const loginMutation = useLoginMutation();
+  const forgotPasswordMutation = useForgotPasswordMutation();
+  const resetPasswordMutation = useResetPasswordMutation();
 
+  // --- 1. LOGIN ---
   const login = async (data: any) => {
     setLoading(true);
     try {
-      // Logic gọi API login sẽ nằm ở đây
-      // const response = await loginMutation.mutateAsync(data);
-      // const staff = response?.resultObj;
-      // Cookies.set("role", staff?.roleName ?? "", { expires: 1 });
-      // setStaff(staff);
-      // toastSuccess("Đăng nhập thành công");
-      // router.push(DASHBOARD_AUTH_ROUTES.MAIN);
+      // Gọi API Login
+      const resultObj = await loginMutation.mutateAsync(data);
+
+      // Backend trả về resultObj là AuthStaffDTO (đã fix ở bước trước)
+      const staff = resultObj;
+
+      // Lưu Role vào Cookie để Middleware (nếu có) check
+      Cookies.set("role", staff.roleName ?? "", { expires: 1 });
+
+      // Lưu thông tin Staff vào LocalStorage
+      setStaff(staff);
+
+      toastSuccess("Đăng nhập thành công!");
+
+      // Điều hướng dựa trên Role (Dự án này chỉ quan tâm Admin)
+      if (staff.roleName === "Admin") {
+        router.push("/dashboard/admin"); // Hoặc dùng ADMIN_ROUTES.MAIN
+      } else {
+        // Nếu lỡ có user thường đăng nhập vào đây -> đá về trang chủ
+        router.push("/");
+      }
     } catch (error) {
       handleErrorApi({ error });
     } finally {
@@ -55,14 +82,57 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  // --- 2. LOGOUT ---
   const logout = async () => {
     setLoading(true);
     try {
       setStaff(null);
       Cookies.remove("role");
       router.push(DASHBOARD_AUTH_ROUTES.LOGIN);
+      toastSuccess("Đã đăng xuất.");
     } catch (error) {
       console.error("Logout failed:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // --- 3. FORGOT PASSWORD ---
+  const forgotPassword = async (email: string) => {
+    setLoading(true);
+    try {
+      await forgotPasswordMutation.mutateAsync({ email });
+      // Logic điều hướng sau khi gửi mail thành công (thường là sang trang nhập OTP)
+      // router.push(...) -> Login form sẽ tự xử lý chuyển trang
+      toastSuccess("Mã xác nhận đã được gửi đến email.");
+    } catch (error) {
+      handleErrorApi({ error });
+      throw error; // Ném lỗi để Form bắt được
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // --- 4. RESET PASSWORD ---
+  const resetPassword = async (
+    email: string,
+    pass: string,
+    confirmPass: string,
+    token: string
+  ) => {
+    setLoading(true);
+    try {
+      await resetPasswordMutation.mutateAsync({
+        email,
+        password: pass,
+        confirmPassword: confirmPass,
+        token,
+      });
+      router.push(DASHBOARD_AUTH_ROUTES.LOGIN);
+      toastSuccess("Đặt lại mật khẩu thành công. Vui lòng đăng nhập.");
+    } catch (error) {
+      handleErrorApi({ error });
+      throw error;
     } finally {
       setLoading(false);
     }
@@ -73,18 +143,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     login,
     logout,
     isAuthenticated,
+    forgotPassword,
+    resetPassword,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
-export function useAuthContext() {
+export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error("useAuthContext must be used within an AuthProvider");
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 }
+
+// --- HELPER FUNCTIONS ---
 
 export const setStaff = (staff: LoginResponse | null) => {
   if (typeof window === "undefined") {

@@ -1,7 +1,7 @@
 // src/types/dashboard/search-params.ts
 
 export interface SearchPaginationRequest {
-  keyword?: string;
+  searchValue?: string;
   pageIndex?: number;
   pageSize?: number;
   isDeleted?: boolean;

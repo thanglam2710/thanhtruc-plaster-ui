@@ -24,6 +24,14 @@ export const useGetAllCategories = () => {
   );
 };
 
+export const useGetCategoryById = (id: number) => {
+  return useApiQuery<CategoryDTO>(
+    CacheKeys.Categories,
+    DASHBOARD_API_ENDPOINTS.CATEGORIES.GET_BY_ID.replace("{id}", id.toString()),
+    { skip: !id }
+  );
+};
+
 export const useCreateCategoryMutation = () => {
   return useApiMutation<CategoryDTO, CreateCategoryRequest>(
     DASHBOARD_API_ENDPOINTS.CATEGORIES.CREATE, false, { invalidateQueries: [CacheKeys.Categories] }

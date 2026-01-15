@@ -3,7 +3,7 @@ import { useApiDeleteMutation, useApiMutation, useApiPutMutation, useApiQuery } 
 import { objectToQueryParams } from "@/lib/utils";
 import { CacheKeys } from "@/hooks/base/cacheKey";
 import { BlogDTO, BlogTypeDTO, CreateBlogRequest, CreateBlogTypeRequest, SearchBlogRequest, UpdateBlogRequest, UpdateBlogTypeRequest } from "@/types/dashboard/blogs";
-import { PaginationResponse } from "@/types/dashboard/search-params";
+import { PaginationResponse, SearchPaginationRequest } from "@/types/dashboard/search-params";
 
 // --- BLOG HOOKS ---
 export const useGetBlogsPagination = (request?: SearchBlogRequest | null, options?: { skip?: boolean }) => {
@@ -20,8 +20,8 @@ export const useGetBlogsPagination = (request?: SearchBlogRequest | null, option
 
 export const useGetBlogById = (id: number) => {
   return useApiQuery<BlogDTO>(
-    CacheKeys.Blogs, 
-    DASHBOARD_API_ENDPOINTS.BLOGS.GET_BY_ID.replace("{id}", id.toString()), 
+    CacheKeys.Blogs,
+    DASHBOARD_API_ENDPOINTS.BLOGS.GET_BY_ID.replace("{id}", id.toString()),
     { skip: !id }
   );
 };
@@ -50,6 +50,26 @@ export const useGetAllBlogTypes = () => {
   return useApiQuery<BlogTypeDTO[]>(
     CacheKeys.BlogTypes,
     DASHBOARD_API_ENDPOINTS.BLOG_TYPES.GET_ALL
+  );
+};
+
+export const useGetBlogTypesPagination = (request?: SearchPaginationRequest | null, options?: { skip?: boolean }) => {
+  return useApiQuery<PaginationResponse<BlogTypeDTO>>(
+    CacheKeys.BlogTypes,
+    DASHBOARD_API_ENDPOINTS.BLOG_TYPES.SEARCH,
+    {
+      params: objectToQueryParams(request || {}),
+      skip: options?.skip,
+      ...options,
+    }
+  );
+};
+
+export const useGetBlogTypeById = (id: number) => {
+  return useApiQuery<BlogTypeDTO>(
+    CacheKeys.BlogTypes,
+    DASHBOARD_API_ENDPOINTS.BLOG_TYPES.GET_BY_ID.replace("{id}", id.toString()),
+    { skip: !id }
   );
 };
 

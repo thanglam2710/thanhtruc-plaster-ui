@@ -59,7 +59,7 @@ export function objectToQueryParams(
   obj: any
 ): Record<string, string> {
   if (!obj) return {};
-  
+
   return (
     Object.entries(obj)
       .filter(([_, value]) => value !== undefined && value !== null && value !== "")
@@ -112,10 +112,10 @@ export const handleErrorApi = ({
     }
   }
 
-  const errorMessage = error instanceof Error 
-    ? error.message 
-    : typeof error === 'string' 
-      ? error 
+  const errorMessage = error instanceof Error
+    ? error.message
+    : typeof error === 'string'
+      ? error
       : "Có lỗi xảy ra";
 
   toast.error(errorMessage, {

@@ -212,9 +212,14 @@ export default function CreateProjectPage() {
                   name="completedAt"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Năm hoàn thành</FormLabel>
+                      <FormLabel>Ngày hoàn thành</FormLabel>
                       <FormControl>
-                        <Input placeholder="Ví dụ: 2024" {...field} />
+                        <Input 
+                          type="datetime-local" 
+                          {...field}
+                          value={field.value ? new Date(field.value).toISOString().slice(0, 16) : ""}
+                          onChange={(e) => field.onChange(e.target.value ? new Date(e.target.value).toISOString() : "")}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

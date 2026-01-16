@@ -32,6 +32,7 @@ import {
 } from "@/hooks/dashboard/projects/useProjects";
 import { useGetAllCategories } from "@/hooks/dashboard/categories/useCategories";
 import { toastSuccess, handleErrorApi } from "@/lib/utils/api";
+import { formatFullDateTime } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useUploadImage } from "@/hooks/dashboard/cloudinary/useCloudinary";
 import Image from "next/image";
@@ -297,9 +298,14 @@ export default function ProjectDetailPage() {
                     name="completedAt"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Năm hoàn thành</FormLabel>
+                        <FormLabel>Ngày hoàn thành</FormLabel>
                         <FormControl>
-                          <Input placeholder="Ví dụ: 2024" {...field} />
+                          <Input 
+                            type="datetime-local" 
+                            {...field}
+                            value={field.value ? new Date(field.value).toISOString().slice(0, 16) : ""}
+                            onChange={(e) => field.onChange(e.target.value ? new Date(e.target.value).toISOString() : "")}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -501,10 +507,10 @@ export default function ProjectDetailPage() {
                 )}
                 {project.completedAt && (
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground">Năm hoàn thành</p>
+                    <p className="text-sm font-medium text-muted-foreground">Ngày hoàn thành</p>
                     <p className="text-lg flex items-center gap-2 mt-1">
                       <Calendar className="h-4 w-4" />
-                      {project.completedAt}
+                      {formatFullDateTime(project.completedAt)}
                     </p>
                   </div>
                 )}

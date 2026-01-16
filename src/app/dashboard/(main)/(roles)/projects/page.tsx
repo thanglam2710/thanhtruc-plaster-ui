@@ -40,6 +40,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { formatFullDateTime } from "@/lib/utils";
 
 function ProjectsContent() {
   const searchParams = useSearchParams();
@@ -316,7 +317,7 @@ function ProjectsContent() {
                       </div>
                     </TableCell>
                     <TableCell className="text-muted-foreground text-center">{project.location || "-"}</TableCell>
-                    <TableCell className="text-muted-foreground text-center">{project.completedAt || "-"}</TableCell>
+                    <TableCell className="text-muted-foreground text-center">{project.completedAt ? formatFullDateTime(project.completedAt) : "-"}</TableCell>
                     <TableCell className="text-center">
                       <div className="flex justify-center">
                         {project.isActive ? (

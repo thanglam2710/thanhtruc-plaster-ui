@@ -9,8 +9,7 @@ import { USER_ROUTES } from "@/constants/routes/user/main";
 
 // Menu tĩnh (chỉ giữ lại những mục không động)
 const STATIC_MENU_START = [
-  { label: "Trang chủ", link: USER_ROUTES.HOME },
-  { label: "Giới thiệu", link: USER_ROUTES.ABOUT },
+  { label: "Trang chủ", link: USER_ROUTES.HOME }
 ];
 
 export const Navbar = () => {
@@ -78,7 +77,7 @@ export const Navbar = () => {
                   className="relative group h-20 flex items-center"
                 >
                   <Link
-                    href={`/categories/${rootCat.slug}`} // Link vào trang chi tiết cha
+                    href={`/categories?parentId=${rootCat.id}`}
                     className="flex items-center text-sm font-semibold text-brand-primary hover:text-brand-secondary cursor-pointer uppercase tracking-wide whitespace-nowrap"
                   >
                     {rootCat.name}
@@ -100,7 +99,7 @@ export const Navbar = () => {
                       {childCats.map((child) => (
                         <Link
                           key={child.id}
-                          href={`/categories/${child.slug}`}
+                          href={`/projects?categoryId=${child.id}&isActive=true`}
                           className="block px-6 py-3 text-sm font-medium text-brand-primary hover:bg-bg-main hover:text-brand-secondary transition-colors"
                         >
                           {child.name}
@@ -125,7 +124,7 @@ export const Navbar = () => {
                 {blogTypes?.map((type) => (
                   <Link
                     key={type.id}
-                    href={`${USER_ROUTES.BLOGS.LIST}?type=${type.id}`}
+                    href={`${USER_ROUTES.BLOGS.LIST}?blogTypeId=${type.id}&isPublished=true`}
                     className="block px-6 py-3 text-sm font-medium text-brand-primary hover:bg-bg-main hover:text-brand-secondary transition-colors"
                   >
                     {type.name}
@@ -174,12 +173,12 @@ export const Navbar = () => {
             ))}
 
             {/* Dynamic Categories */}
-            {rootCategories.map((root) => {
+             {rootCategories.map((root) => {
               const children = getChildCategories(root.id);
               return (
                 <div key={root.id} className="border-b border-gray-100">
                   <Link
-                    href={`/categories/${root.slug}`}
+                    href={`/categories?parentId=${root.id}`}
                     className="block py-4 text-sm font-bold text-brand-primary uppercase"
                   >
                     {root.name}
@@ -189,7 +188,7 @@ export const Navbar = () => {
                       {children.map((child) => (
                         <Link
                           key={child.id}
-                          href={`/categories/${child.slug}`}
+                          href={`/projects?categoryId=${child.id}&isActive=true`}
                           className="block py-2 text-xs font-medium text-text-muted hover:text-brand-secondary"
                         >
                           - {child.name}

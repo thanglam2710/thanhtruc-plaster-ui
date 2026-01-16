@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 import { MapPin, ChevronLeft, ChevronRight } from "lucide-react";
 import { useGetPublicProjects } from "@/hooks/user/usePublicData";
 import Link from "next/link";
@@ -9,6 +8,7 @@ export const FeaturedProjects = () => {
     pageSize: 4,
     pageIndex: 1,
     isFeatured: true,
+    isActive: true,
   });
   const projects = projectData?.items || [];
 

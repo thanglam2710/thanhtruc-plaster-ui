@@ -2,7 +2,7 @@ export const USER_ROUTES = {
     HOME: "/",
     ABOUT: "/about",
     CONTACT: "/contacts",
-    
+
     // Dự án (Dùng Slug)
     PROJECTS: {
         LIST: "/projects",
@@ -13,5 +13,10 @@ export const USER_ROUTES = {
     BLOGS: {
         LIST: "/blogs",
         DETAIL: "/blogs/:slug",
-    }
+    },
+
+    // Danh mục
+    CATEGORIES: {
+        LIST: "/categories",
+    },
 };

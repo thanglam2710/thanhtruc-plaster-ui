@@ -199,3 +199,14 @@ export function formatDateTime(isoDate: string): string {
     return "";
   }
 }
+
+// Format full date and time (e.g., "15/01/2024 10:30")
+export function formatFullDateTime(isoDate: string): string {
+  try {
+    const date = parseISO(isoDate);
+    return format(date, "dd/MM/yyyy HH:mm", { locale: vi });
+  } catch (error) {
+    console.error("Lỗi format ngày giờ:", error);
+    return "";
+  }
+}

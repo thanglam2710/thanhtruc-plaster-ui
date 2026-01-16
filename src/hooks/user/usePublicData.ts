@@ -3,6 +3,7 @@ import { useApiQuery } from "../base/useApi";
 import { CacheKeys } from "../base/cacheKey";
 import { ProjectDTO } from "@/types/dashboard/projects";
 import { BlogDTO } from "@/types/dashboard/blogs";
+import { CategoryDTO } from "@/types/dashboard/categories";
 import { PaginationResponse } from "@/types/dashboard/search-params";
 import { objectToQueryParams } from "@/lib/utils";
 
@@ -39,5 +40,14 @@ export const useGetBlogBySlug = (slug: string) => {
     CacheKeys.Blogs,
     USER_API_ENDPOINTS.BLOGS.GET_BY_SLUG.replace("{slug}", slug),
     { skip: !slug }
+  );
+};
+
+// Lấy danh sách categories (Public) - for parent categories
+export const useGetPublicCategories = (request?: any) => {
+  return useApiQuery<PaginationResponse<CategoryDTO>>(
+    CacheKeys.UserCategoriesAll,
+    USER_API_ENDPOINTS.CATEGORIES.SEARCH,
+    { params: objectToQueryParams(request || {}) }
   );
 };

@@ -6,10 +6,9 @@ import { Facebook, Youtube, Linkedin, Mail, Phone, MapPin } from "lucide-react";
 const FOOTER_LINKS = {
   quickLinks: [
     { label: "Về chúng tôi", href: "/about" },
-    { label: "Sản phẩm hệ thống", href: "/categories" },
     { label: "Dự án công trình", href: "/projects" },
     { label: "Tin tức sự kiện", href: "/blogs" },
-    { label: "Tuyển dụng", href: "/careers" },
+    { label: "Báo giá và tuyển dụng", href: "/contacts" },
   ],
   policies: [
     { label: "Chính sách bảo mật", href: "/privacy" },
@@ -18,9 +17,9 @@ const FOOTER_LINKS = {
     { label: "Quy định đổi trả", href: "/return-policy" },
   ],
   contact: {
-    address: "Tầng 12, Tòa nhà Bitexco, 02 Hải Triều, Q.1, TP. Hồ Chí Minh",
-    phone: "1800 1218 (Miễn phí)",
-    email: "hotro@thanhtrucgypsum.vn",
+    address: "02 Đường số 10, Phần Bình Hưng Hòa, TP. Hồ Chí Minh",
+    phone: "024 3922 1111",
+    email: "thanhtrucplaster@gmail.com",
   },
 };
 

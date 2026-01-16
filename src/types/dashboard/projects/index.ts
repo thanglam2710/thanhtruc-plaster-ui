@@ -10,13 +10,13 @@ export interface ProjectDTO {
   description?: string;
   content?: string;
   location?: string;
-  completedAt?: string;
+  completedAt?: string; // ISO DateTime string from backend
   isFeatured: boolean;
   isActive: boolean;
-  
+
   categoryId: number;
   categoryName: string;
-  
+
   createdTime?: string;
   updatedTime?: string;
 }
@@ -29,7 +29,7 @@ export interface CreateProjectRequest {
   description?: string;
   content?: string;
   location?: string;
-  completedAt?: string;
+  completedAt?: string; // ISO DateTime string (e.g., "2024-01-15T10:30:00")
   isFeatured?: boolean;
   isActive?: boolean;
   categoryId: number;

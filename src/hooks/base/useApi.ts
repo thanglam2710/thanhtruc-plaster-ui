@@ -63,9 +63,22 @@ export function useApiQuery<T = any>(
 ) {
   const { params, headers, skip = false, ...queryOptions } = options || {}
   const normalizedEndpoint = endpoint.replace(/[?&]/g, "_")
-  const fullQueryKey = params
-    ? [`${baseKey}:${normalizedEndpoint}`, params]
-    : [`${baseKey}:${normalizedEndpoint}`]
+
+  // Serialize params to ensure stable queryKey
+  const serializedParams = params
+    ? JSON.stringify(
+      Object.keys(params)
+        .sort()
+        .reduce((acc, key) => {
+          acc[key] = params[key];
+          return acc;
+        }, {} as Record<string, string>)
+    )
+    : null;
+
+  const fullQueryKey = serializedParams
+    ? [baseKey, normalizedEndpoint, serializedParams]
+    : [baseKey, normalizedEndpoint]
 
   return useQuery<T>({
     queryKey: fullQueryKey,

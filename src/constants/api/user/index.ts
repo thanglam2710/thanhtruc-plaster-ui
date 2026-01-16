@@ -7,6 +7,7 @@ export const USER_API_ENDPOINTS = {
   // 2. Danh mục (Menu)
   CATEGORIES: {
     GET_ALL: "/Categories/get-all",
+    SEARCH: "/Categories/search",
   },
 
   // 3. Dự án (Trang xem chi tiết dùng Slug)
@@ -20,8 +21,8 @@ export const USER_API_ENDPOINTS = {
     SEARCH: "/Blogs/search",
     GET_BY_SLUG: "/Blogs/slug/{slug}",
   },
-  
-  // 5. Loại bài viết (Để filter)
+
+  // 4. Loại bài viết (Dùng Slug)
   BLOG_TYPES: {
     GET_ALL: "/BlogTypes/get-all",
   },

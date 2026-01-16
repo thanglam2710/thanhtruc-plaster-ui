@@ -59,7 +59,7 @@ export const SolutionFinder = () => {
           </h2>
           <p className="text-text-muted max-w-2xl mx-auto font-body">
             Lựa chọn giải pháp phù hợp với nhu cầu của công trình để đảm bảo
-            chất lượng và độ bền cao nhất.
+            chất lượng và độ bền cao.
           </p>
         </div>
 

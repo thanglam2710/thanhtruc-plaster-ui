@@ -37,7 +37,7 @@ const CONTACT_STATUS_OPTIONS = [
 const CONTACT_TYPE_OPTIONS = [
   { id: ContactType.Quote, name: "Báo giá" },
   { id: ContactType.Recruitment, name: "Tuyển dụng" },
-  { id: ContactType.Other, name: "Liên hệ khác" }, // Updated to match backend "Liên hệ khác"
+  { id: ContactType.Other, name: "Liên hệ khác" },
 ];
 
 function ContactsContent() {
@@ -251,45 +251,56 @@ function ContactsContent() {
           </p>
 
           <div className="rounded-md border">
-            <Table>
+<Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[50px]">STT</TableHead>
-                  <TableHead>Họ tên</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Số điện thoại</TableHead>
-                  <TableHead>Công ty</TableHead>
-                  <TableHead>Loại</TableHead>
-                  <TableHead>Trạng thái</TableHead>
-                  <TableHead>Ngày gửi</TableHead>
-                  <TableHead className="w-[100px]">Hành động</TableHead>
+                  <TableHead className="w-[50px] text-center">STT</TableHead>
+                  <TableHead className="text-center">Họ tên</TableHead>
+                  <TableHead className="text-center">Email</TableHead>
+                  <TableHead className="text-center">Số điện thoại</TableHead>
+                  <TableHead className="text-center">Công ty</TableHead>
+                  <TableHead className="text-center">Loại</TableHead>
+                  <TableHead className="text-center">Trạng thái</TableHead>
+                  <TableHead className="text-center">Ngày gửi</TableHead>
+                  <TableHead className="w-[120px] text-center">Hành động</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {contacts.map((contact: any, index: number) => (
                   <TableRow key={contact.id}>
-                    <TableCell className="font-medium">
+                    <TableCell className="font-medium text-center">
                       {(queryParams.pageIndex! - 1) * queryParams.pageSize! + index + 1}
                     </TableCell>
-                    <TableCell className="font-medium">{contact.customerName}</TableCell>
-                    <TableCell>{contact.email || "-"}</TableCell>
-                    <TableCell>{contact.phone}</TableCell>
-                    <TableCell className="text-muted-foreground">{contact.companyName || "-"}</TableCell>
-                    <TableCell>
-                      {getTypeBadge(contact.contactType, contact.contactTypeName)}
+                    <TableCell className="font-medium text-center">{contact.customerName}</TableCell>
+                    <TableCell className="text-center">{contact.email || "-"}</TableCell>
+                    <TableCell className="text-center">{contact.phone}</TableCell>
+                    <TableCell className="text-muted-foreground text-center">{contact.companyName || "-"}</TableCell>
+                    <TableCell className="text-center">
+                      <div className="flex justify-center">
+                        {getTypeBadge(contact.contactType, contact.contactTypeName)}
+                      </div>
                     </TableCell>
-                    <TableCell>
-                      {getStatusBadge(contact.contactStatus, contact.contactStatusName)}
+                    <TableCell className="text-center">
+                      <div className="flex justify-center">
+                        {getStatusBadge(contact.contactStatus, contact.contactStatusName)}
+                      </div>
                     </TableCell>
-                    <TableCell className="text-muted-foreground">
+                    <TableCell className="text-muted-foreground text-center">
                       {new Date(contact.createdTime).toLocaleDateString('vi-VN')}
                     </TableCell>
-                    <TableCell>
-                      <Link href={`/dashboard/contacts/${contact.id}`}>
-                        <Button size="sm" variant="ghost">
-                          <Eye className="h-4 w-4" />
-                        </Button>
-                      </Link>
+                    <TableCell className="text-center">
+                      <div className="bg-gray-50 border rounded-md p-1">
+                        <Link href={`/dashboard/contacts/${contact.id}`}>
+                          <Button 
+                            size="sm" 
+                            variant="ghost" 
+                            className="w-full justify-center h-8 hover:bg-gray-100"
+                          >
+                            <Eye className="h-3.5 w-3.5 mr-1.5" />
+                            <span className="text-xs">Xem chi tiết</span>
+                          </Button>
+                        </Link>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}

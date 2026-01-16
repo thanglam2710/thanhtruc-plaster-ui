@@ -225,26 +225,26 @@ function BlogsContent() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[50px]">STT</TableHead>
-                  <TableHead>Hình ảnh</TableHead>
-                  <TableHead>Tiêu đề</TableHead>
-                  <TableHead>Loại</TableHead>
-                  <TableHead>Tác giả</TableHead>
-                  <TableHead>Lượt xem</TableHead>
-                  <TableHead>Trạng thái</TableHead>
-                  <TableHead className="w-[150px]">Hành động</TableHead>
+                  <TableHead className="w-[50px] text-center">STT</TableHead>
+                  <TableHead className="text-center">Hình ảnh</TableHead>
+                  <TableHead className="text-center">Tiêu đề</TableHead>
+                  <TableHead className="text-center">Loại</TableHead>
+                  <TableHead className="text-center">Tác giả</TableHead>
+                  <TableHead className="text-center">Lượt xem</TableHead>
+                  <TableHead className="text-center">Trạng thái</TableHead>
+                  <TableHead className="w-[150px] text-center">Hành động</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {blogs.map((blog: any, index: number) => (
                   <TableRow key={blog.id}>
-                    <TableCell className="font-medium">
+                    <TableCell className="font-medium text-center">
                       {(queryParams.pageIndex! - 1) * queryParams.pageSize! + index + 1}
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="text-center">
                       {blog.thumbnail && 
                        blog.thumbnail.startsWith('http') ? (
-                        <div className="relative h-12 w-12">
+                        <div className="relative h-12 w-12 mx-auto">
                           <Image
                             src={blog.thumbnail}
                             alt={blog.title}
@@ -253,52 +253,70 @@ function BlogsContent() {
                           />
                         </div>
                       ) : (
-                        <div className="flex h-12 w-12 items-center justify-center rounded-md bg-muted">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-md bg-muted mx-auto">
                           <ImageIcon className="h-6 w-6 text-muted-foreground" />
                         </div>
                       )}
                     </TableCell>
-                    <TableCell className="font-medium max-w-xs truncate">{blog.title}</TableCell>
-                    <TableCell>
-                      <Badge variant="outline">{blog.blogTypeName}</Badge>
+                    <TableCell className="font-medium max-w-xs truncate text-center">{blog.title}</TableCell>
+                    <TableCell className="text-center">
+                      <div className="flex justify-center">
+                        <Badge variant="outline">{blog.blogTypeName}</Badge>
+                      </div>
                     </TableCell>
-                    <TableCell className="text-muted-foreground">{blog.authorName}</TableCell>
-                    <TableCell>{blog.viewCount}</TableCell>
-                    <TableCell>
-                      {blog.isPublished ? (
-                        <Badge variant="default" className="bg-green-600">Đã xuất bản</Badge>
-                      ) : (
-                        <Badge variant="secondary">Nháp</Badge>
-                      )}
+                    <TableCell className="text-muted-foreground text-center">{blog.authorName}</TableCell>
+                    <TableCell className="text-center">{blog.viewCount}</TableCell>
+                    <TableCell className="text-center">
+                      <div className="flex justify-center">
+                        {blog.isPublished ? (
+                          <Badge variant="default" className="bg-green-600">Đã xuất bản</Badge>
+                        ) : (
+                          <Badge variant="secondary">Nháp</Badge>
+                        )}
+                      </div>
                     </TableCell>
-                    <TableCell>
-                      <div className="flex gap-2">
-                        <Link href={`/dashboard/blogs/${blog.id}`}>
-                          <Button size="sm" variant="ghost">
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                        </Link>
-                        <AlertDialog>
-                          <AlertDialogTrigger asChild>
-                            <Button size="sm" variant="ghost">
-                              <Trash2 className="h-4 w-4 text-destructive" />
+                    <TableCell className="text-center">
+                      <div className="flex flex-col gap-1">
+                        <div className="bg-gray-50 border rounded-md p-1">
+                          <Link href={`/dashboard/blogs/${blog.id}`}>
+                            <Button 
+                              size="sm" 
+                              variant="ghost" 
+                              className="w-full justify-center h-8 hover:bg-gray-100"
+                            >
+                              <Eye className="h-3.5 w-3.5 mr-1.5" />
+                              <span className="text-xs">Xem chi tiết</span>
                             </Button>
-                          </AlertDialogTrigger>
-                          <AlertDialogContent>
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>Xác nhận xóa</AlertDialogTitle>
-                              <AlertDialogDescription>
-                                Bạn có chắc chắn muốn xóa bài viết "{blog.title}"?
-                              </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>Hủy</AlertDialogCancel>
-                              <AlertDialogAction onClick={() => handleDelete(blog.id)}>
-                                Xóa
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
+                          </Link>
+                        </div>
+                        <div className="bg-gray-50 border rounded-md p-1">
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button 
+                                size="sm" 
+                                variant="ghost" 
+                                className="w-full justify-center h-8 hover:bg-gray-100"
+                              >
+                                <Trash2 className="h-3.5 w-3.5 mr-1.5 text-destructive" />
+                                <span className="text-xs text-destructive">Xóa dữ liệu</span>
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>Xác nhận xóa</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  Bạn có chắc chắn muốn xóa bài viết "{blog.title}"?
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Hủy</AlertDialogCancel>
+                                <AlertDialogAction onClick={() => handleDelete(blog.id)}>
+                                  Xóa
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        </div>
                       </div>
                     </TableCell>
                   </TableRow>

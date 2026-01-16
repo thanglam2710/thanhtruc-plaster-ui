@@ -32,10 +32,17 @@ export interface UpdateStaffStatusRequest {
 export interface UpdateProfileRequest {
     id: string;
     fullName: string;
+    email: string;
     phoneNumber?: string;
     avatarUrl?: string;
     gender?: number;
     dateOfBirth?: string;
+}
+
+export interface ChangePasswordRequest {
+    oldPassword: string;
+    newPassword: string;
+    confirmPassword: string;
 }
 
 export interface SearchStaffRequest extends SearchPaginationRequest {

@@ -141,7 +141,6 @@ function CategoriesContent() {
       </div>
 
       {/* Results */}
-      {/* Results */}
       {isLoading ? (
         <div className="space-y-4">
            <Skeleton className="h-8 w-full" />
@@ -152,29 +151,29 @@ function CategoriesContent() {
           <p className="text-muted-foreground">
             Hiển thị {categories.length} kết quả trong tổng số {totalRecords} danh mục
           </p>
-          {/* ... existing table code ... */}
+
           <div className="rounded-md border">
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[50px]">STT</TableHead>
-                  <TableHead>Hình ảnh</TableHead>
-                  <TableHead>Tên</TableHead>
-                  <TableHead>Mô tả</TableHead>
-                  <TableHead>Trạng thái</TableHead>
-                  <TableHead className="w-[150px]">Hành động</TableHead>
+                  <TableHead className="w-[50px] text-center">STT</TableHead>
+                  <TableHead className="text-center">Hình ảnh</TableHead>
+                  <TableHead className="text-center">Tên</TableHead>
+                  <TableHead className="text-center">Mô tả</TableHead>
+                  <TableHead className="text-center">Trạng thái</TableHead>
+                  <TableHead className="w-[150px] text-center">Hành động</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {categories.map((category: any, index: number) => (
                   <TableRow key={category.id}>
-                    <TableCell className="font-medium">
+                    <TableCell className="font-medium text-center">
                       {(queryParams.pageIndex! - 1) * queryParams.pageSize! + index + 1}
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="text-center">
                       {category.image && 
                        category.image.startsWith('http') ? (
-                        <div className="relative h-12 w-12">
+                        <div className="relative h-12 w-12 mx-auto">
                           <Image
                             src={category.image}
                             alt={category.name}
@@ -183,50 +182,64 @@ function CategoriesContent() {
                           />
                         </div>
                       ) : (
-                        <div className="flex h-12 w-12 items-center justify-center rounded-md bg-muted">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-md bg-muted mx-auto">
                           <ImageIcon className="h-6 w-6 text-muted-foreground" />
                         </div>
                       )}
                     </TableCell>
-                    <TableCell className="font-medium">{category.name}</TableCell>
-                    <TableCell className="text-muted-foreground max-w-xs truncate">
+                    <TableCell className="font-medium text-center">{category.name}</TableCell>
+                    <TableCell className="text-muted-foreground max-w-xs truncate text-center">
                       {category.description || "-"}
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="text-center">
                       {category.isActive ? (
-                        <CheckCircle2 className="h-5 w-5 text-green-600" />
+                        <CheckCircle2 className="h-5 w-5 text-green-600 mx-auto" />
                       ) : (
-                        <XCircle className="h-5 w-5 text-red-500" />
+                        <XCircle className="h-5 w-5 text-red-500 mx-auto" />
                       )}
                     </TableCell>
-                    <TableCell>
-                      <div className="flex gap-2">
-                        <Link href={`/dashboard/categories/${category.id}`}>
-                          <Button size="sm" variant="ghost">
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                        </Link>
-                        <AlertDialog>
-                          <AlertDialogTrigger asChild>
-                            <Button size="sm" variant="ghost">
-                              <Trash2 className="h-4 w-4 text-destructive" />
+                    <TableCell className="text-center">
+                      <div className="flex flex-col gap-1">
+                        <div className="bg-gray-50 border rounded-md p-1">
+                          <Link href={`/dashboard/categories/${category.id}`}>
+                            <Button 
+                              size="sm" 
+                              variant="ghost" 
+                              className="w-full justify-center h-8 hover:bg-gray-100"
+                            >
+                              <Eye className="h-3.5 w-3.5 mr-1.5" />
+                              <span className="text-xs">Xem chi tiết</span>
                             </Button>
-                          </AlertDialogTrigger>
-                          <AlertDialogContent>
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>Xác nhận xóa</AlertDialogTitle>
-                              <AlertDialogDescription>
-                                Bạn có chắc chắn muốn xóa danh mục "{category.name}"?
-                              </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>Hủy</AlertDialogCancel>
-                              <AlertDialogAction onClick={() => handleDelete(category.id)}>
-                                Xóa
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
+                          </Link>
+                        </div>
+                        <div className="bg-gray-50 border rounded-md p-1">
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button 
+                                size="sm" 
+                                variant="ghost" 
+                                className="w-full justify-center h-8 hover:bg-gray-100"
+                              >
+                                <Trash2 className="h-3.5 w-3.5 mr-1.5 text-destructive" />
+                                <span className="text-xs text-destructive">Xóa dữ liệu</span>
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>Xác nhận xóa</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  Bạn có chắc chắn muốn xóa danh mục "{category.name}"?
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Hủy</AlertDialogCancel>
+                                <AlertDialogAction onClick={() => handleDelete(category.id)}>
+                                  Xóa
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        </div>
                       </div>
                     </TableCell>
                   </TableRow>

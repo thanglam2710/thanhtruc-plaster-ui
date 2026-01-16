@@ -137,7 +137,6 @@ function BlogTypesContent() {
       </div>
 
       {/* Results */}
-      {/* Results */}
       {isLoading ? (
         <div className="space-y-4">
            <Skeleton className="h-8 w-full" />
@@ -153,48 +152,62 @@ function BlogTypesContent() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[50px]">STT</TableHead>
-                  <TableHead>Tên</TableHead>
-                  <TableHead>Slug</TableHead>
-                  <TableHead className="w-[150px]">Hành động</TableHead>
+                  <TableHead className="w-[50px] text-center">STT</TableHead>
+                  <TableHead className="text-center">Tên</TableHead>
+                  <TableHead className="text-center">Slug</TableHead>
+                  <TableHead className="w-[150px] text-center">Hành động</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {blogTypes.map((blogType: any, index: number) => (
                   <TableRow key={blogType.id}>
-                    <TableCell className="font-medium">
+                    <TableCell className="font-medium text-center">
                       {(queryParams.pageIndex! - 1) * queryParams.pageSize! + index + 1}
                     </TableCell>
-                    <TableCell>{blogType.name}</TableCell>
-                    <TableCell className="text-muted-foreground">{blogType.slug}</TableCell>
-                    <TableCell>
-                      <div className="flex gap-2">
-                        <Link href={`/dashboard/blog-types/${blogType.id}`}>
-                          <Button size="sm" variant="ghost">
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                        </Link>
-                        <AlertDialog>
-                          <AlertDialogTrigger asChild>
-                            <Button size="sm" variant="ghost">
-                              <Trash2 className="h-4 w-4 text-destructive" />
+                    <TableCell className="text-center">{blogType.name}</TableCell>
+                    <TableCell className="text-muted-foreground text-center">{blogType.slug}</TableCell>
+                    <TableCell className="text-center">
+                      <div className="flex flex-col gap-1">
+                        <div className="bg-gray-50 border rounded-md p-1">
+                          <Link href={`/dashboard/blog-types/${blogType.id}`}>
+                            <Button 
+                              size="sm" 
+                              variant="ghost" 
+                              className="w-full justify-center h-8 hover:bg-gray-100"
+                            >
+                              <Eye className="h-3.5 w-3.5 mr-1.5" />
+                              <span className="text-xs">Xem chi tiết</span>
                             </Button>
-                          </AlertDialogTrigger>
-                          <AlertDialogContent>
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>Xác nhận xóa</AlertDialogTitle>
-                              <AlertDialogDescription>
-                                Bạn có chắc chắn muốn xóa loại bài viết "{blogType.name}"?
-                              </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>Hủy</AlertDialogCancel>
-                              <AlertDialogAction onClick={() => handleDelete(blogType.id)}>
-                                Xóa
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
+                          </Link>
+                        </div>
+                        <div className="bg-gray-50 border rounded-md p-1">
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button 
+                                size="sm" 
+                                variant="ghost" 
+                                className="w-full justify-center h-8 hover:bg-gray-100"
+                              >
+                                <Trash2 className="h-3.5 w-3.5 mr-1.5 text-destructive" />
+                                <span className="text-xs text-destructive">Xóa dữ liệu</span>
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>Xác nhận xóa</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  Bạn có chắc chắn muốn xóa loại bài viết "{blogType.name}"?
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Hủy</AlertDialogCancel>
+                                <AlertDialogAction onClick={() => handleDelete(blogType.id)}>
+                                  Xóa
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        </div>
                       </div>
                     </TableCell>
                   </TableRow>

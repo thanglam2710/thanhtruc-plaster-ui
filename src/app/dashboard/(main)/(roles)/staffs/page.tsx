@@ -210,14 +210,14 @@ function StaffsContent() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[50px]">STT</TableHead>
-                  <TableHead>Avatar</TableHead>
-                  <TableHead>Họ tên</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Số điện thoại</TableHead>
-                  <TableHead>Vai trò</TableHead>
-                  <TableHead>Trạng thái</TableHead>
-                  <TableHead className="w-[150px]">Hành động</TableHead>
+                  <TableHead className="w-[50px] text-center">STT</TableHead>
+                  <TableHead className="text-center">Avatar</TableHead>
+                  <TableHead className="text-center">Họ tên</TableHead>
+                  <TableHead className="text-center">Email</TableHead>
+                  <TableHead className="text-center">Số điện thoại</TableHead>
+                  <TableHead className="text-center">Vai trò</TableHead>
+                  <TableHead className="text-center">Trạng thái</TableHead>
+                  <TableHead className="w-[120px] text-center">Thao tác</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -226,13 +226,13 @@ function StaffsContent() {
                   
                   return (
                     <TableRow key={staff.id}>
-                      <TableCell className="font-medium">
+                      <TableCell className="font-medium text-center">
                         {(queryParams.pageIndex! - 1) * queryParams.pageSize! + index + 1}
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="text-center">
                         {staff.avatarUrl && 
                          staff.avatarUrl.startsWith('http') ? (
-                          <div className="relative h-10 w-10">
+                          <div className="relative h-10 w-10 mx-auto">
                             <Image
                               src={staff.avatarUrl}
                               alt={staff.fullName}
@@ -241,33 +241,43 @@ function StaffsContent() {
                             />
                           </div>
                         ) : (
-                          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted">
+                          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted mx-auto">
                             <UserIcon className="h-5 w-5 text-muted-foreground" />
                           </div>
                         )}
                       </TableCell>
-                      <TableCell className="font-medium">
-                        {staff.fullName}
-                        {isCurrentUser && (
-                          <Badge variant="outline" className="ml-2 text-xs">Bạn</Badge>
-                        )}
+                      <TableCell className="font-medium text-center">
+                        <div className="flex flex-col items-center">
+                          <span>{staff.fullName} {isCurrentUser && (
+                            <Badge variant="outline" className="mt-1 text-xs">Bạn</Badge>
+                          )}</span>
+                        </div>
                       </TableCell>
-                      <TableCell>{staff.email}</TableCell>
-                      <TableCell className="text-muted-foreground">{staff.phoneNumber || "-"}</TableCell>
-                      <TableCell>
-                        <Badge variant="outline">{staff.roleName}</Badge>
+                      <TableCell className="text-center">{staff.email}</TableCell>
+                      <TableCell className="text-muted-foreground text-center">{staff.phoneNumber || "-"}</TableCell>
+                      <TableCell className="text-center">
+                        <div className="flex justify-center">
+                          <Badge variant="outline">{staff.roleName}</Badge>
+                        </div>
                       </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
+                      <TableCell className="text-center">
+                        <div className="flex justify-center">
                           {getStatusBadge(staff.status, staff.statusName)}
                         </div>
                       </TableCell>
-                      <TableCell>
-                        <Link href={`/dashboard/staffs/${staff.id}`}>
-                          <Button size="sm" variant="ghost">
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                        </Link>
+                      <TableCell className="text-center">
+                        <div className="bg-gray-50 border rounded-md p-1">
+                          <Link href={`/dashboard/staffs/${staff.id}`}>
+                            <Button 
+                              size="sm" 
+                              variant="ghost" 
+                              className="w-full justify-center h-8 hover:bg-gray-100"
+                            >
+                              <Eye className="h-3.5 w-3.5 mr-1.5" />
+                              <span className="text-xs">Xem chi tiết</span>
+                            </Button>
+                          </Link>
+                        </div>
                       </TableCell>
                     </TableRow>
                   );

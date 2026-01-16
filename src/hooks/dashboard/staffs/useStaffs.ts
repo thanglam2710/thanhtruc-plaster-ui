@@ -2,7 +2,7 @@ import { DASHBOARD_API_ENDPOINTS } from "@/constants/api/dashboard/main";
 import { useApiMutation, useApiPutMutation, useApiQuery } from "@/hooks/base/useApi";
 import { objectToQueryParams } from "@/lib/utils";
 import { CacheKeys } from "@/hooks/base/cacheKey";
-import { CreateStaffRequest, SearchStaffRequest, StaffDTO, UpdateStaffStatusRequest, UpdateProfileRequest } from "@/types/dashboard/staffs";
+import { CreateStaffRequest, SearchStaffRequest, StaffDTO, UpdateStaffStatusRequest, UpdateProfileRequest, ChangePasswordRequest } from "@/types/dashboard/staffs";
 import { PaginationResponse } from "@/types/dashboard/search-params";
 
 // GET ALL (Pagination)
@@ -54,5 +54,14 @@ export const useUpdateProfileMutation = () => {
         DASHBOARD_API_ENDPOINTS.STAFFS.UPDATE_PROFILE,
         { invalidateQueries: [CacheKeys.Staffs] },
         true // isMultipart
+    );
+};
+
+// CHANGE PASSWORD
+export const useChangePasswordMutation = () => {
+    return useApiPutMutation<any, ChangePasswordRequest>(
+        DASHBOARD_API_ENDPOINTS.STAFFS.CHANGE_PASSWORD,
+        { invalidateQueries: [] }, // No cache invalidation needed
+        false // Not multipart
     );
 };

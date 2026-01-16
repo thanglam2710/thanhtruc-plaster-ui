@@ -46,7 +46,7 @@ export function NavMain({
               <CollapsibleTrigger asChild>
                 <SidebarMenuButton
                   tooltip={item.title}
-                  className="hover:bg-transparent hover:text-primary data-[state=open]:hover:bg-transparent data-[state=open]:hover:text-primary"
+                  className="hover:bg-transparent hover:text-brand-secondary data-[state=open]:hover:bg-transparent data-[state=open]:hover:text-brand-secondary"
                 >
                   {item.icon && <item.icon />}
                   <span>{item.title}</span>
@@ -59,7 +59,7 @@ export function NavMain({
                     <SidebarMenuSubItem key={subItem.title}>
                       <SidebarMenuSubButton
                         asChild
-                        className="text-white hover:bg-transparent hover:text-primary data-[state=open]:hover:bg-transparent data-[state=open]:hover:text-primary"
+                        className="text-white hover:bg-transparent hover:text-brand-secondary data-[state=open]:hover:bg-transparent data-[state=open]:hover:text-brand-secondary"
                       >
                         <Link href={subItem.url}>
                           <span>{subItem.title}</span>

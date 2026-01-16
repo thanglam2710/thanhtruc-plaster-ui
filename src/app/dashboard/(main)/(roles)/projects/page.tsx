@@ -14,7 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Search, CirclePlus, Eye, ImageIcon, Star } from "lucide-react";
+import { Search, CirclePlus, Eye, ImageIcon, Star, Trash2 } from "lucide-react";
 import { useGetProjectsPagination, useDeleteProjectMutation } from "@/hooks/dashboard/projects/useProjects";
 import { useGetAllCategories } from "@/hooks/dashboard/categories/useCategories";
 import type { SearchProjectRequest } from "@/types/dashboard/projects";
@@ -31,7 +31,6 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { toastSuccess } from "@/lib/utils/api";
-import { Trash2 } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -263,26 +262,26 @@ function ProjectsContent() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[50px]">STT</TableHead>
-                  <TableHead>Hình ảnh</TableHead>
-                  <TableHead>Tên dự án</TableHead>
-                  <TableHead>Danh mục</TableHead>
-                  <TableHead>Địa điểm</TableHead>
-                  <TableHead>Hoàn thành</TableHead>
-                  <TableHead>Trạng thái</TableHead>
-                  <TableHead className="w-[150px]">Hành động</TableHead>
+                  <TableHead className="w-[50px] text-center">STT</TableHead>
+                  <TableHead className="text-center">Hình ảnh</TableHead>
+                  <TableHead className="text-center">Tên dự án</TableHead>
+                  <TableHead className="text-center">Danh mục</TableHead>
+                  <TableHead className="text-center">Địa điểm</TableHead>
+                  <TableHead className="text-center">Hoàn thành</TableHead>
+                  <TableHead className="text-center">Trạng thái</TableHead>
+                  <TableHead className="w-[150px] text-center">Hành động</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {projects.map((project: any, index: number) => (
                   <TableRow key={project.id}>
-                    <TableCell className="font-medium">
+                    <TableCell className="font-medium text-center">
                       {(queryParams.pageIndex! - 1) * queryParams.pageSize! + index + 1}
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="text-center">
                       {project.thumbnail && 
-                       project.thumbnail.startsWith('http') ? (
-                        <div className="relative h-12 w-12">
+                      project.thumbnail.startsWith('http') ? (
+                        <div className="relative h-12 w-12 mx-auto">
                           <Image
                             src={project.thumbnail}
                             alt={project.name}
@@ -291,59 +290,77 @@ function ProjectsContent() {
                           />
                         </div>
                       ) : (
-                        <div className="flex h-12 w-12 items-center justify-center rounded-md bg-muted">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-md bg-muted mx-auto">
                           <ImageIcon className="h-6 w-6 text-muted-foreground" />
                         </div>
                       )}
                     </TableCell>
-                    <TableCell className="font-medium max-w-xs truncate">
-                      <div className="flex items-center gap-2">
+                    <TableCell className="font-medium max-w-xs truncate text-center">
+                      <div className="flex items-center gap-2 justify-center">
                         {project.name}
                         {project.isFeatured && (
                           <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                         )}
                       </div>
                     </TableCell>
-                    <TableCell>
-                      <Badge variant="outline">{project.categoryName}</Badge>
+                    <TableCell className="text-center">
+                      <div className="flex justify-center">
+                        <Badge variant="outline">{project.categoryName}</Badge>
+                      </div>
                     </TableCell>
-                    <TableCell className="text-muted-foreground">{project.location || "-"}</TableCell>
-                    <TableCell className="text-muted-foreground">{project.completedAt || "-"}</TableCell>
-                    <TableCell>
-                      {project.isActive ? (
-                        <Badge variant="default" className="bg-green-600">Hoạt động</Badge>
-                      ) : (
-                        <Badge variant="secondary">Ẩn</Badge>
-                      )}
+                    <TableCell className="text-muted-foreground text-center">{project.location || "-"}</TableCell>
+                    <TableCell className="text-muted-foreground text-center">{project.completedAt || "-"}</TableCell>
+                    <TableCell className="text-center">
+                      <div className="flex justify-center">
+                        {project.isActive ? (
+                          <Badge variant="default" className="bg-green-600">Hoạt động</Badge>
+                        ) : (
+                          <Badge variant="secondary">Ẩn</Badge>
+                        )}
+                      </div>
                     </TableCell>
-                    <TableCell>
-                      <div className="flex gap-2">
-                        <Link href={`/dashboard/projects/${project.id}`}>
-                          <Button size="sm" variant="ghost">
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                        </Link>
-                        <AlertDialog>
-                          <AlertDialogTrigger asChild>
-                            <Button size="sm" variant="ghost">
-                              <Trash2 className="h-4 w-4 text-destructive" />
+                    <TableCell className="text-center">
+                      <div className="flex flex-col gap-1">
+                        <div className="bg-gray-50 border rounded-md p-1">
+                          <Link href={`/dashboard/projects/${project.id}`}>
+                            <Button 
+                              size="sm" 
+                              variant="ghost" 
+                              className="w-full justify-center h-8 hover:bg-gray-100"
+                            >
+                              <Eye className="h-3.5 w-3.5 mr-1.5" />
+                              <span className="text-xs">Xem chi tiết</span>
                             </Button>
-                          </AlertDialogTrigger>
-                          <AlertDialogContent>
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>Xác nhận xóa</AlertDialogTitle>
-                              <AlertDialogDescription>
-                                Bạn có chắc chắn muốn xóa dự án "{project.name}"?
-                              </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>Hủy</AlertDialogCancel>
-                              <AlertDialogAction onClick={() => handleDelete(project.id)}>
-                                Xóa
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
+                          </Link>
+                        </div>
+                        <div className="bg-gray-50 border rounded-md p-1">
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button 
+                                size="sm" 
+                                variant="ghost" 
+                                className="w-full justify-center h-8 hover:bg-gray-100"
+                              >
+                                <Trash2 className="h-3.5 w-3.5 mr-1.5 text-destructive" />
+                                <span className="text-xs text-destructive">Xóa dữ liệu</span>
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>Xác nhận xóa</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  Bạn có chắc chắn muốn xóa dự án "{project.name}"?
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Hủy</AlertDialogCancel>
+                                <AlertDialogAction onClick={() => handleDelete(project.id)}>
+                                  Xóa
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        </div>
                       </div>
                     </TableCell>
                   </TableRow>

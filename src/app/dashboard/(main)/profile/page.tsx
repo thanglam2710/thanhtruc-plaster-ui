@@ -12,18 +12,20 @@ import Image from "next/image";
 import { UserStatus } from "@/types/enums";
 
 import { EditProfileDialog } from "./edit-profile-dialog";
+import { ChangePasswordDialog } from "./change-password-dialog";
 import { Button } from "@/components/ui/button";
-import { Edit } from "lucide-react";
+import { Edit, Key } from "lucide-react";
 
 export default function ProfilePage() {
   const [currentUser, setCurrentUser] = useState<LoginResponse | null>(null);
   const [editOpen, setEditOpen] = useState(false);
+  const [changePasswordOpen, setChangePasswordOpen] = useState(false);
 
   useEffect(() => {
     setCurrentUser(getStaff());
   }, []);
 
-  const { data: staff, isLoading, error } = useGetStaffById(currentUser?.id || "");
+  const { data: staff, isLoading, error, refetch } = useGetStaffById(currentUser?.id || "");
 
   // ... (Keep existing Loading/Error states)
   if (isLoading || !currentUser) {
@@ -156,14 +158,28 @@ export default function ProfilePage() {
              <CardTitle>Bảo mật & Cài đặt</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
+            <Button 
+              onClick={() => setChangePasswordOpen(true)} 
+              className="w-full"
+              variant="outline"
+            >
+              <Key className="w-4 h-4 mr-2" />
+              Đổi mật khẩu
+            </Button>
             <div className="p-4 bg-blue-50 text-blue-800 rounded-lg text-sm">
-                Nếu bạn muốn đổi mật khẩu, vui lòng liên hệ quản trị viên cấp cao hoặc sử dụng chức năng Quên mật khẩu.
+              Bạn có thể thay đổi mật khẩu của mình bất cứ lúc nào để đảm bảo an toàn tài khoản.
             </div>
           </CardContent>
         </Card>
       </div>
 
-      <EditProfileDialog open={editOpen} onOpenChange={setEditOpen} user={staff} />
+      <EditProfileDialog 
+        open={editOpen} 
+        onOpenChange={setEditOpen} 
+        user={staff}
+        onSuccess={() => refetch()}
+      />
+      <ChangePasswordDialog open={changePasswordOpen} onOpenChange={setChangePasswordOpen} />
     </div>
   );
 }

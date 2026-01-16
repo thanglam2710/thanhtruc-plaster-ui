@@ -54,6 +54,7 @@ export const DASHBOARD_API_ENDPOINTS = {
     CREATE: "/Staffs/create-admin",
     UPDATE_PROFILE: "/Staffs/update-profile",
     UPDATE_STATUS: "/Staffs/update-status",
+    CHANGE_PASSWORD: "/Staffs/change-password",
   },
 
   // 7. Quản lý Media (Cloudinary)

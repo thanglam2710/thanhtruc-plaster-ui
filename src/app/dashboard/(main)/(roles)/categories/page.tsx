@@ -15,6 +15,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Search, CirclePlus, Eye, ImageIcon, CheckCircle2, XCircle } from "lucide-react";
+import TablePagination from "@/components/dashboard/table-pagination";
 import { useGetCategoriesPagination, useDeleteCategoryMutation } from "@/hooks/dashboard/categories/useCategories";
 import type { SearchCategoryRequest } from "@/types/dashboard/categories";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -91,6 +92,12 @@ function CategoriesContent() {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const handlePageChange = (page: number) => {
+    const newParams = { ...queryParams, pageIndex: page };
+    setQueryParams(newParams);
+    updateUrlParams(newParams);
   };
 
   if (error) {
@@ -247,6 +254,14 @@ function CategoriesContent() {
               </TableBody>
             </Table>
           </div>
+
+          {data && data.totalPages > 1 && (
+            <TablePagination
+              totalPages={data.totalPages}
+              currentPage={data.pageIndex}
+              onPageChange={handlePageChange}
+            />
+          )}
         </>
       ) : (
         <div className="text-center py-12">

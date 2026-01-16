@@ -14,6 +14,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Search, Eye } from "lucide-react";
+import TablePagination from "@/components/dashboard/table-pagination";
 import { useGetContactsPagination } from "@/hooks/dashboard/contacts/useContacts";
 import type { SearchContactRequest } from "@/types/dashboard/contacts";
 import { ContactStatus, ContactType } from "@/types/enums";
@@ -93,6 +94,12 @@ function ContactsContent() {
     };
     setQueryParams(resetParams);
     updateUrlParams(resetParams);
+  };
+
+  const handlePageChange = (page: number) => {
+    const newParams = { ...queryParams, pageIndex: page };
+    setQueryParams(newParams);
+    updateUrlParams(newParams);
   };
 
   const getStatusBadge = (status: ContactStatus | string, statusName?: string) => {
@@ -307,6 +314,14 @@ function ContactsContent() {
               </TableBody>
             </Table>
           </div>
+
+          {data && data.totalPages > 1 && (
+            <TablePagination
+              totalPages={data.totalPages}
+              currentPage={data.pageIndex}
+              onPageChange={handlePageChange}
+            />
+          )}
         </>
       ) : (
         <div className="text-center py-12">

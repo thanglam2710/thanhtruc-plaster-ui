@@ -15,6 +15,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Search, CirclePlus, Eye, ImageIcon, CheckCircle2, XCircle } from "lucide-react";
+import TablePagination from "@/components/dashboard/table-pagination";
 import { useGetBlogsPagination, useDeleteBlogMutation, useGetAllBlogTypes } from "@/hooks/dashboard/blogs/useBlogs";
 import type { SearchBlogRequest } from "@/types/dashboard/blogs";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -96,6 +97,12 @@ function BlogsContent() {
     };
     setQueryParams(resetParams);
     updateUrlParams(resetParams);
+  };
+
+  const handlePageChange = (page: number) => {
+    const newParams = { ...queryParams, pageIndex: page };
+    setQueryParams(newParams);
+    updateUrlParams(newParams);
   };
 
   const handleDelete = async (id: number) => {
@@ -324,6 +331,14 @@ function BlogsContent() {
               </TableBody>
             </Table>
           </div>
+
+          {data && data.totalPages > 1 && (
+            <TablePagination
+              totalPages={data.totalPages}
+              currentPage={data.pageIndex}
+              onPageChange={handlePageChange}
+            />
+          )}
         </>
       ) : (
         <div className="text-center py-12">

@@ -15,6 +15,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Search, CirclePlus, Eye, ImageIcon, Star, Trash2 } from "lucide-react";
+import TablePagination from "@/components/dashboard/table-pagination";
 import { useGetProjectsPagination, useDeleteProjectMutation } from "@/hooks/dashboard/projects/useProjects";
 import { useGetAllCategories } from "@/hooks/dashboard/categories/useCategories";
 import type { SearchProjectRequest } from "@/types/dashboard/projects";
@@ -106,6 +107,12 @@ function ProjectsContent() {
     };
     setQueryParams(resetParams);
     updateUrlParams(resetParams);
+  };
+
+  const handlePageChange = (page: number) => {
+    const newParams = { ...queryParams, pageIndex: page };
+    setQueryParams(newParams);
+    updateUrlParams(newParams);
   };
 
   const handleDelete = async (id: number) => {
@@ -368,6 +375,14 @@ function ProjectsContent() {
               </TableBody>
             </Table>
           </div>
+
+          {data && data.totalPages > 1 && (
+            <TablePagination
+              totalPages={data.totalPages}
+              currentPage={data.pageIndex}
+              onPageChange={handlePageChange}
+            />
+          )}
         </>
       ) : (
         <div className="text-center py-12">

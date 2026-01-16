@@ -15,6 +15,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Search, CirclePlus, Eye, User as UserIcon } from "lucide-react";
+import TablePagination from "@/components/dashboard/table-pagination";
 import { useGetStaffsPagination } from "@/hooks/dashboard/staffs/useStaffs";
 import type { SearchStaffRequest } from "@/types/dashboard/staffs";
 import { UserStatus } from "@/types/enums";
@@ -90,6 +91,12 @@ function StaffsContent() {
     };
     setQueryParams(resetParams);
     updateUrlParams(resetParams);
+  };
+
+  const handlePageChange = (page: number) => {
+    const newParams = { ...queryParams, pageIndex: page };
+    setQueryParams(newParams);
+    updateUrlParams(newParams);
   };
 
   const getStatusId = (status: UserStatus | string): number => {
@@ -285,6 +292,14 @@ function StaffsContent() {
               </TableBody>
             </Table>
           </div>
+
+          {data && data.totalPages > 1 && (
+            <TablePagination
+              totalPages={data.totalPages}
+              currentPage={data.pageIndex}
+              onPageChange={handlePageChange}
+            />
+          )}
         </>
       ) : (
         <div className="text-center py-12">

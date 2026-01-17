@@ -129,7 +129,10 @@ function ProjectsListContent() {
             <img 
               src={getValidImageUrl(category.image)} 
               alt={category.name}
-              className="absolute inset-0 w-full h-full object-cover"
+              className="absolute inset-0 w-full h-full object-cover protected-image"
+              draggable={false}
+              onContextMenu={(e) => e.preventDefault()}
+              onDragStart={(e) => e.preventDefault()}
             />
             <div className="absolute inset-0 bg-linear-to-b from-black/60 via-black/40 to-black/60" />
           </>
@@ -229,7 +232,10 @@ function ProjectsListContent() {
                             src={getValidImageUrl(project.thumbnail)}
                             alt={project.name}
                             fill
-                            className="object-cover group-hover:scale-110 transition-transform duration-300"
+                            className="object-cover group-hover:scale-110 transition-transform duration-300 protected-image"
+                            draggable={false}
+                            onContextMenu={(e) => e.preventDefault()}
+                            onDragStart={(e) => e.preventDefault()}
                           />
                           {/* Category badge overlay */}
                           {project.categoryName && (

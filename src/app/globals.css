@@ -65,6 +65,27 @@ h6 {
   background-color: var(--color-brand-primary);
 }
 
+/* Image Protection - Prevent copying, dragging, and right-click */
+.protected-image {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  pointer-events: auto;
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
+}
+
+/* Disable context menu and selection on images */
+.no-context-menu {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 /* ---break---
 */
 @theme inline {

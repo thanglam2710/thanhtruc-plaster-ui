@@ -44,7 +44,10 @@ export const FeaturedProjects = () => {
                 <img
                   src={project.thumbnail || "https://placehold.co/600x800"}
                   alt={project.name}
-                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 protected-image"
+                  draggable={false}
+                  onContextMenu={(e) => e.preventDefault()}
+                  onDragStart={(e) => e.preventDefault()}
                 />
               </div>
               <h3 className="text-xl font-bold text-brand-primary mb-1 group-hover:text-brand-secondary transition-colors font-heading">

@@ -73,7 +73,10 @@ function ProjectDetailContent() {
             src={getValidImageUrl(project.thumbnail)}
             alt={project.name}
             fill
-            className="object-cover"
+            className="object-cover protected-image"
+            draggable={false}
+            onContextMenu={(e) => e.preventDefault()}
+            onDragStart={(e) => e.preventDefault()}
             priority
           />
         </div>
@@ -92,7 +95,10 @@ function ProjectDetailContent() {
                     src={getValidImageUrl(imageUrl)}
                     alt={`${project.name} - Ảnh ${index + 1}`}
                     fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-500"
+                    className="object-cover group-hover:scale-110 transition-transform duration-500 protected-image"
+                    draggable={false}
+                    onContextMenu={(e) => e.preventDefault()}
+                    onDragStart={(e) => e.preventDefault()}
                   />
                 </div>
               ))}

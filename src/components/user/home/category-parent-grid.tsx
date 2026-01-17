@@ -11,20 +11,7 @@ export const CategoryParentGrid = () => {
     parentId: null,
   });
 
-  useEffect(() => {
-    if (categoryData?.items) {
-      console.log("=== CATEGORY DATA DEBUG ===");
-      console.log("Total items:", categoryData.items.length);
-      categoryData.items.forEach((cat, idx) => {
-        console.log(`[${idx}] ${cat.name}:`, {
-          id: cat.id,
-          image: cat.image,
-          hasImage: !!cat.image,
-          imageType: typeof cat.image
-        });
-      });
-    }
-  }, [categoryData]);
+
 
   const categories = categoryData?.items || [];
 
@@ -40,7 +27,6 @@ export const CategoryParentGrid = () => {
 
   // Debug: Kiểm tra nếu không có dữ liệu
   if (categories.length === 0) {
-    console.warn("No categories found!");
     return (
       <section className="py-20 bg-bg-main">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -70,8 +56,6 @@ export const CategoryParentGrid = () => {
                   : `https://your-api-domain.com${category.image}`)
               : "https://placehold.co/600x800";
             
-            console.log(`Rendering ${category.name} with image:`, imageUrl);
-            
             return (
               <Link
                 key={category.id}
@@ -84,12 +68,14 @@ export const CategoryParentGrid = () => {
                     <img
                       src={imageUrl}
                       alt={category.name}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 protected-image"
+                      draggable={false}
+                      onContextMenu={(e) => e.preventDefault()}
+                      onDragStart={(e) => e.preventDefault()}
                       onError={(e) => {
                         console.error(`Image failed to load: ${imageUrl}`);
                         e.currentTarget.src = "https://placehold.co/600x800";
                       }}
-                      onLoad={() => console.log(`Image loaded: ${imageUrl}`)}
                     />
                   </div>
                 </div>

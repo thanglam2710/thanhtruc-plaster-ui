@@ -73,16 +73,12 @@ async function uploadImage(image: File): Promise<ImageUploadResult | null> {
   const formData = new FormData();
   formData.append('file', image);
   formData.append('upload_preset', process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!);
-  // Debug: Log to verify env vars
-  console.log('Cloud name:', process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME);
-  console.log('Upload preset:', process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET);
   const response = await fetch(`https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`, {
     method: 'POST',
     body: formData,
   });
   if (!response.ok) {
     const errorData = await response.json();
-    console.error('Upload error details:', errorData);
     throw new Error(`Image upload failed: ${errorData.error?.message || 'Unknown error'}`);
   }
   const dataJson = await response.json();
@@ -106,16 +102,12 @@ async function uploadVideo(video: File): Promise<VideoUploadResult | null> {
   const formData = new FormData();
   formData.append('file', video);
   formData.append('upload_preset', process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!);
-  // Debug: Log to verify env vars
-  // console.log('Cloud name:', process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME);
-  // console.log('Upload preset:', process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET);
   const response = await fetch(`https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/video/upload`, {
     method: 'POST',
     body: formData,
   });
   if (!response.ok) {
     const errorData = await response.json();
-    console.error('Upload error details:', errorData);
     throw new Error(`Video upload failed: ${errorData.error?.message || 'Unknown error'}`);
   }
   const dataJson = await response.json();

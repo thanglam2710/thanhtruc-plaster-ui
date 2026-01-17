@@ -37,7 +37,6 @@ export function getQueryClient() {
       invalidationChannel.onmessage = (event) => {
         const { keys } = event.data;
         if (Array.isArray(keys)) {
-          console.log("📡 Received invalidation from other tab:", keys);
           keys.forEach((key: string) => {
             queryClientInstance!.invalidateQueries({
               predicate: (query) => {
@@ -76,7 +75,6 @@ export const queryClient = getQueryClient();
 export function broadcastInvalidation(keys: string[]) {
   const channel = (queryClient as any).__invalidationChannel;
   if (channel) {
-    console.log("📤 Broadcasting invalidation to all tabs:", keys);
     channel.postMessage({ keys });
   }
 }

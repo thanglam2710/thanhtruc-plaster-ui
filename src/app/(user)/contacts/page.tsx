@@ -21,6 +21,9 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { useCreateContactMutation } from "@/hooks/dashboard/contacts/useContacts";
 import { useUploadImage } from "@/hooks/dashboard/cloudinary/useCloudinary";
 import { toastSuccess } from "@/lib/utils/api";
+import { useContactRateLimit } from "@/hooks/user/useContactRateLimit";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle, Clock } from "lucide-react";
 import { ContactType } from "@/types/enums";
 import {
   Select,
@@ -55,9 +58,11 @@ export default function ContactPage() {
   const router = useRouter();
   const [attachmentUrl, setAttachmentUrl] = useState<string | null>(null);
   const [isUploadingAttachment, setIsUploadingAttachment] = useState(false);
+  const [rateLimitError, setRateLimitError] = useState<string | null>(null);
 
   const createMutation = useCreateContactMutation();
   const uploadImage = useUploadImage();
+  const rateLimit = useContactRateLimit();
   
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(createContactSchema),
@@ -99,6 +104,18 @@ export default function ContactPage() {
   };
 
   const onSubmit = async (data: ContactFormValues) => {
+    // Clear any previous rate limit errors
+    setRateLimitError(null);
+
+    // Check frontend rate limit first
+    if (rateLimit.isLimited) {
+      const resetTime = rateLimit.getResetTimeFormatted();
+      setRateLimitError(
+        `Bạn đã đạt giới hạn 5 lần gửi liên hệ trong 24 giờ. Vui lòng thử lại sau ${resetTime}.`
+      );
+      return;
+    }
+
     try {
       // Clean up data based on contact type
       const submitData = {
@@ -112,14 +129,28 @@ export default function ContactPage() {
       };
 
       await createMutation.mutateAsync(submitData);
+      
+      // Record successful submission in localStorage
+      rateLimit.recordSubmission();
+      
       toastSuccess("Gửi liên hệ thành công! Chúng tôi sẽ phản hồi sớm nhất.");
       form.reset();
       setAttachmentUrl(null);
       
       // Optionally redirect after success
       // router.push("/");
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
+      
+      // Handle 429 Too Many Requests from backend
+      if (error?.response?.status === 429 || error?.status === 429) {
+        const backendMessage = error?.response?.data?.message || error?.data?.message;
+        setRateLimitError(
+          backendMessage || "Bạn đã gửi quá nhiều yêu cầu liên hệ. Vui lòng thử lại sau 24 giờ."
+        );
+        // Also record in localStorage to sync with backend
+        rateLimit.recordSubmission();
+      }
     }
   };
 
@@ -141,6 +172,26 @@ export default function ContactPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
+            {/* Rate Limit Error Alert */}
+            {rateLimitError && (
+              <Alert variant="destructive" className="mb-6">
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>Đã đạt giới hạn</AlertTitle>
+                <AlertDescription>{rateLimitError}</AlertDescription>
+              </Alert>
+            )}
+
+            {/* Remaining Submissions Info */}
+            {!rateLimit.isLimited && rateLimit.remaining < 5 && (
+              <Alert variant="destructive" className="mb-6">
+                <Clock className="h-4 w-4" />
+                <AlertTitle>Thông báo</AlertTitle>
+                <AlertDescription>
+                  Bạn còn <strong>{rateLimit.remaining}</strong> lần gửi liên hệ trong 24 giờ tới.
+                </AlertDescription>
+              </Alert>
+            )}
+
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                 {/* Contact Type */}
@@ -328,9 +379,9 @@ export default function ContactPage() {
                   <Button 
                     type="submit" 
                     className="flex-1"
-                    disabled={createMutation.isPending}
+                    disabled={createMutation.isPending || rateLimit.isLimited}
                   >
-                    {createMutation.isPending ? "Đang gửi..." : "Gửi liên hệ"}
+                    {createMutation.isPending ? "Đang gửi..." : rateLimit.isLimited ? "Đã đạt giới hạn" : "Gửi liên hệ"}
                   </Button>
                   <Button 
                     type="button" 

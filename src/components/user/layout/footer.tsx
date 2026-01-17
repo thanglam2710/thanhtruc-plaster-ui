@@ -43,26 +43,6 @@ export const Footer = () => {
               diện, kiến tạo không gian sống đẳng cấp và bền vững cho mọi công
               trình.
             </p>
-            <div className="flex space-x-4">
-              <a
-                href="#"
-                className="p-2 border border-white border-opacity-30 rounded-full hover:bg-brand-secondary hover:text-brand-primary hover:border-brand-secondary transition-all"
-              >
-                <Facebook className="w-5 h-5" />
-              </a>
-              <a
-                href="#"
-                className="p-2 border border-white border-opacity-30 rounded-full hover:bg-brand-secondary hover:text-brand-primary hover:border-brand-secondary transition-all"
-              >
-                <Youtube className="w-5 h-5" />
-              </a>
-              <a
-                href="#"
-                className="p-2 border border-white border-opacity-30 rounded-full hover:bg-brand-secondary hover:text-brand-primary hover:border-brand-secondary transition-all"
-              >
-                <Linkedin className="w-5 h-5" />
-              </a>
-            </div>
           </div>
 
           {/* Col 2: Quick Links */}
